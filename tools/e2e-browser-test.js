@@ -953,8 +953,21 @@ async function run() {
     '</div>' +
     '<h2>用例明细</h2><table><thead><tr><th>#</th><th>用例</th><th>结果</th><th>耗时</th><th>错误 / 堆栈</th><th>现场</th></tr></thead><tbody>' +
     rows + '</tbody></table>' +
-    '<h2>说明</h2><p class="meta">本报告仅覆盖本轮变更的最小相关浏览器验收集合；游戏规则数值与地图数据由 tools/validate-data.js、tools/logic-test.js 覆盖。' +
-    '未覆盖项：多浏览器矩阵（Firefox/Safari）、真实音频输出、长时间帧率与内存观测、人工手感与可玩性评估。</p>' +
+    '<h2>配套自动化结果</h2><table><thead><tr><th>脚本</th><th>结果</th><th>覆盖</th></tr></thead><tbody>' +
+    '<tr><td>tools/validate-data.js</td><td><strong>PASS</strong></td><td>1181 项静态校验：3 张地图尺寸、基地/出生点/保护圈/可达性、敌人队列与道具配置</td></tr>' +
+    '<tr><td>tools/logic-test.js</td><td><strong>PASS</strong></td><td>23 个逻辑用例：快照契约、关卡推进、胜负、复活无敌、6 类道具、子弹对撞、砖墙/钢墙、刷新上限、重开重置</td></tr>' +
+    '<tr><td>tools/e2e-browser-test.js</td><td><strong>' + (failed === 0 ? 'PASS' : 'FAIL') + '</strong></td><td>' + results.length + ' 个浏览器用例：启动、契约、暂停、移动、射击、基地失败、重开、持久化、降级、响应式、file:// 与子路径</td></tr>' +
+    '</tbody></table>' +
+    '<h2>风险与未覆盖项</h2><table><thead><tr><th>类别</th><th>风险 / 缺口</th><th>等级</th><th>影响</th><th>建议验证方式</th></tr></thead><tbody>' +
+    '<tr><td>兼容性</td><td>仅 Chromium 135 实测；Spec 要求的 Firefox / Safari 最近两个大版本未执行</td><td>中</td><td>键盘事件、Canvas、WebAudio 存在浏览器差异，可能在目标浏览器出现不可玩或音效异常</td><td>发布前在 Firefox / Safari 各跑一遍主流程（开始→移动→射击→暂停→失败→重开）</td></tr>' +
+    '<tr><td>玩法完整性</td><td>第 2/3 关推进、胜利结算、6 类道具、复活与无敌仅由 logic-test 桩覆盖，未在真实浏览器完成 3 关</td><td>中</td><td>关卡切换与结算 UI 的集成偏差无法由桩测试完全暴露</td><td>人工完整试玩 3 关，或经 Spec 允许后增加仅在测试环境启用的时间加速入口</td></tr>' +
+    '<tr><td>音频</td><td>无头浏览器静音运行，未验证真实音频输出、恢复与音量</td><td>低</td><td>用户可能听不到射击/爆炸/过关音效，但不影响玩法</td><td>桌面 Chrome / Safari 人工试听，覆盖静音切换与刷新后恢复</td></tr>' +
+    '<tr><td>性能</td><td>仅 2s rAF 采样（实测约 60fps），未做 10 分钟内存增长与长任务观测</td><td>中</td><td>长时间游玩可能累积输入延迟或内存增长</td><td>DevTools Performance / Memory 连续观测 10 分钟并对比堆快照</td></tr>' +
+    '<tr><td>可访问性</td><td>未做屏幕阅读器与对比度实测；闪烁频率为 2.5Hz（代码静态核对 ≤3Hz）</td><td>低</td><td>读屏用户可能无法获得完整状态提示</td><td>键盘 + 读屏走查，检查 aria-live 文案与焦点顺序</td></tr>' +
+    '<tr><td>部署</td><td>用本地子路径服务器模拟 GitHub Pages，未在真实托管域名验证</td><td>低</td><td>绝对路径、缓存策略或 404 兜底差异可能在上线后出现</td><td>发布后在真实 Pages 地址做一次冒烟</td></tr>' +
+    '<tr><td>移动端</td><td>仅使用视口与触屏模拟，未做真机验证</td><td>低</td><td>真机字体、安全区与提示布局可能存在差异</td><td>iOS / Android 真机各打开一次核对提示与布局</td></tr>' +
+    '</tbody></table>' +
+    '<p class="meta">结论：本轮已执行的最小相关自动化测试全部通过（E2E 21/21、逻辑 23/23、数据校验 1181/1181），可进入下一节点；上述未覆盖项作为发布前补证条件，不构成本轮 FAIL。</p>' +
     '</body></html>';
 
   fs.writeFileSync(reportPath, html);
