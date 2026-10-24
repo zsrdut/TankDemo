@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>坦克大战</title>
+  <meta name="description" content="零构建、单人守基地的经典坦克大战网页游戏">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230b0d10'/%3E%3Crect x='4' y='5' width='8' height='7' fill='%23f5c542'/%3E%3Crect x='7' y='2' width='2' height='4' fill='%23fff3c4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1>坦克大战</h1>
+        <p class="subtitle">守住基地，歼灭全部敌军</p>
+      </div>
+      <div class="topbar-actions">
+        <button id="muteBtn" class="btn btn-ghost" type="button" aria-pressed="false">音效：开</button>
+        <button id="pauseBtn" class="btn btn-ghost" type="button" disabled>暂停</button>
+      </div>
+    </header>
+
+    <section class="hud" aria-label="游戏状态">
+      <div class="stat"><span class="stat-label">关卡</span><strong id="hudLevel">1</strong></div>
+      <div class="stat"><span class="stat-label">生命</span><strong id="hudLives">3</strong></div>
+      <div class="stat"><span class="stat-label">剩余敌人</span><strong id="hudEnemies">20</strong></div>
+      <div class="stat"><span class="stat-label">得分</span><strong id="hudScore">0</strong></div>
+      <div class="stat"><span class="stat-label">最高分</span><strong id="hudHighScore">0</strong></div>
+      <div class="stat stat-wide"><span class="stat-label">生效状态</span><strong id="hudEffects">—</strong></div>
+    </section>
+
+    <main class="main">
+      <div id="stage" class="stage">
+        <canvas id="gameCanvas" width="208" height="208" tabindex="0" role="img"
+          aria-label="坦克大战游戏画面，13 乘 13 格像素战场">您的浏览器不支持 Canvas，请更换浏览器。</canvas>
+
+        <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+          <div class="overlay-panel">
+            <h2 id="overlayTitle">准备战斗</h2>
+            <p id="overlayText" class="overlay-text"></p>
+            <p id="overlayStats" class="overlay-stats"></p>
+            <div class="overlay-actions">
+              <button id="primaryBtn" class="btn btn-primary" type="button">开始游戏</button>
+              <button id="secondaryBtn" class="btn btn-secondary" type="button" hidden>重新开始</button>
+            </div>
+            <p class="overlay-hint">也可按 Enter 确认</p>
+          </div>
+        </div>
+
+      </div>
+
+      <p id="mobileHint" class="mobile-hint">建议使用电脑键盘游玩</p>
+      <p id="toast" class="toast" role="status" aria-live="polite"></p>
+
+      <section class="help" aria-label="操作说明">
+        <h2>操作说明</h2>
+        <ul>
+          <li><kbd>方向键</kbd> / <kbd>WASD</kbd> 移动</li>
+          <li><kbd>空格</kbd> / <kbd>J</kbd> 射击</li>
+          <li><kbd>P</kbd> 暂停 / 继续，<kbd>M</kbd> 静音 / 恢复</li>
+          <li><kbd>Enter</kbd> 开始 / 确认</li>
+        </ul>
+        <p class="help-note">保护底部基地，消灭每关 20 辆敌方坦克。共 3 关。</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>纯前端 · 零构建 · 无外部素材</span>
+      <span id="ariaStatus" class="sr-only" aria-live="polite"></span>
+    </footer>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
