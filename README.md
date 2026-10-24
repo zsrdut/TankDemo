@@ -64,6 +64,7 @@ tools/validate-data.js 零依赖静态数据校验
 ```bash
 node tools/validate-data.js
 node tools/logic-test.js
+node tools/e2e-browser-test.js
 node --check js/config.js
 node --check js/storage.js
 node --check js/audio.js
@@ -73,7 +74,8 @@ node --check js/main.js
 
 - `validate-data.js` 校验三张地图的 13×13 尺寸、基地 2×2、出生点、基地保护圈、可达性、每关 20 个敌人的类型配比与道具合法性。
 - `logic-test.js` 使用零依赖 Node 测试桩覆盖只读快照、关卡推进、胜利/失败、复活与无敌、道具、子弹对撞、砖墙/钢墙、敌人刷新上限与重开重置。
-- 两个脚本均不引入 npm 依赖、构建步骤或测试框架，也不参与浏览器运行时。
+- `e2e-browser-test.js` 通过 Node 内置 WebSocket 驱动系统 Chromium 的 DevTools Protocol，在真实浏览器验证启动、暂停、移动、射击、基地失败、重开、持久化、降级、响应式、`file://` 与子路径部署；需本机安装 Chrome/Chromium，缺失时输出 `BLOCKED`，报告写入 `test-reports/e2e-report.html`。
+- 以上脚本均不引入 npm 依赖、构建步骤或测试框架，也不参与浏览器运行时。
 
 ## 技术约定
 
